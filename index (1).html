@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mae</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap');
+
+    body {
+      background-color: #f3e5c2;
+      font-family: 'Homemade Apple', cursive;
+      margin: 0;
+      padding: 40px 20px;
+      color: #5b4636;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .old-paper {
+      background-color: #f9eecb;
+      box-shadow:
+        inset 0 0 50px #e8d3aa,
+        0 15px 30px rgba(0,0,0,0.15);
+      max-width: 700px;
+      padding: 40px 50px;
+      border: 1px solid #d1c7a1;
+      border-radius: 15px;
+      line-height: 1.6;
+      font-size: 1.25rem;
+      white-space: pre-wrap;
+      color: #2d1a05;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #a67c00;
+      font-size: 3rem;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 3px #d4bc70;
+      user-select: none;
+    }
+
+    .dearest {
+      font-weight: bold;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .now-playing {
+      text-align: center;
+    }
+
+    .now-playing h2 {
+      font-size: 1.2rem;
+      color: #a67c00;
+      margin-bottom: 12px;
+    }
+
+    .spotify-embed {
+      border-radius: 12px;
+      width: 100%;
+      max-width: 100%;
+      height: 352px;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 20px 10px;
+      }
+
+      .old-paper {
+        padding: 30px 20px;
+        max-width: 90vw;
+        font-size: 1.1rem;
+      }
+
+      .now-playing h2 {
+        font-size: 1rem;
+      }
+
+      .spotify-embed {
+        height: 300px;
+      }
+    }
+
+    /* Lock Screen Styles */
+    #lockscreen {
+      position: fixed;
+      inset: 0;
+      background-color: #f3e5c2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      font-family: 'Homemade Apple', cursive;
+      color: #5b4636;
+      user-select: none;
+      padding: 20px;
+    }
+
+    #lockscreen h2 {
+      margin-bottom: 8px;
+      font-size: 2rem;
+      color: #a67c00;
+      text-shadow: 1px 1px 3px #d4bc70;
+    }
+
+    #lockscreen .clue {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      color: #7a5a0f;
+      font-weight: 600;
+      opacity: 0.8;
+    }
+
+    #password-input {
+      width: 180px;
+      font-size: 2rem;
+      padding: 8px 12px;
+      border: 2px solid #a67c00;
+      border-radius: 10px;
+      text-align: center;
+      margin-bottom: 20px;
+      letter-spacing: 0.3em;
+      background-color: #f9eecb;
+      color: #5b4636;
+      user-select: text;
+    }
+
+    #keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 60px);
+      gap: 15px;
+    }
+
+    #keypad button {
+      font-family: 'Homemade Apple', cursive;
+      font-size: 1.8rem;
+      background-color: #f9eecb;
+      border: 2px solid #a67c00;
+      border-radius: 10px;
+      color: #5b4636;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.2s, color 0.2s;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    #keypad button:hover {
+      background-color: #a67c00;
+      color: #f3e5c2;
+    }
+
+    #keypad button:active {
+      background-color: #7a5a0f;
+      color: #fff;
+    }
+
+    #clear-btn {
+      grid-column: span 3;
+      background-color: #d14e3d;
+      color: #fff;
+    }
+
+    #clear-btn:hover {
+      background-color: #a03020;
+    }
+
+    #clear-btn:active {
+      background-color: #7a2416;
+    }
+
+    #error-message {
+      color: #d14e3d;
+      font-weight: 700;
+      margin-top: 10px;
+      min-height: 1.2em;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="lockscreen" aria-label="Password Lock Screen">
+    <h2>Enter Password</h2>
+    <div class="clue">Clue: the month and the date of your birthday</div>
+    <input id="password-input" type="password" maxlength="4" aria-label="Password input" autocomplete="off" inputmode="numeric" pattern="[0-9]*" />
+    <div id="keypad" role="keypad" aria-label="Numeric keypad">
+      <button type="button" data-key="1">1</button>
+      <button type="button" data-key="2">2</button>
+      <button type="button" data-key="3">3</button>
+      <button type="button" data-key="4">4</button>
+      <button type="button" data-key="5">5</button>
+      <button type="button" data-key="6">6</button>
+      <button type="button" data-key="7">7</button>
+      <button type="button" data-key="8">8</button>
+      <button type="button" data-key="9">9</button>
+      <button type="button" data-key="0">0</button>
+      <button id="clear-btn" type="button">Clear</button>
+    </div>
+    <div id="error-message" role="alert" aria-live="assertive"></div>
+  </div>
+
+  <main style="display:none;">
+    <h1>Mae</h1>
+    <section class="old-paper" aria-label="Letter and music player">
+      <div class="dearest">To my dearest Mae,</div>
+
+      I hope you can give me a moment to share what’s been on my heart and on my mind. I’ve made a lot of mistakes—ones I deeply regret. I tried to make you jealous, not out of spite, but because I was so desperate to feel close to you again. I felt like nawala ka na saakin, hindi na ako, at binitawan mo na ako. That desperation came from a place of love, but I see and understand how wrong it was. For that, I sincerely apologize.
+
+      I know I messed up and I will regret that every single day but I will not hold myself again from expressing what I truly feel for you. The truth is, I yearn for you every single day. There hasn’t been a morning I haven’t woken up with you on my mind, or a night I haven’t gone to sleep wondering if you’re okay. I miss everything—your voice, your laugh, your chikas, your rants, your pang-aasar, the way u listen to my nonstop yaps, and those videos na sinesend mo saakin sa tiktok. Most importantly, I miss you. There’s an emptiness in me that only your presence ever truly filled.
+
+      My love for you is real—so real that it scares me sometimes. I would do anything to prove to you that what I feel isn’t temporary, or subtle, or something I can simply move on from. I’m willing to risk everything, not to demand anything of you, but because you are worth that risk a thousand times over.
+
+      I may be avoidant and scared of commitment but I am willing to get rid of them just for you. I am well aware na avoidant ka rin and I want you to know na kahit ilang beses mo akong itulak palayo sayo, hahanap at hahanap pa rin ako ng rason para manatili sa tabi mo. Naging duwag ako simula nung June pero I will not allow myself na maging duwag ulit lalo na pagdating sayo.
+
+      Show me your imperfections, your flaws, your insecurities, the parts of you na iniisip mong unlovable and I will show you my eyes that are willing to show you how wonderful you are.
+
+      Please understand that I’m not trying to pressure you or anything, hmm? I respect your space, your healing, and your journey. I only wanted you to know how deeply I feel for you—how you are still important to me. I needed you to hear it through words written with nothing but love.
+
+      Whatever happens, wherever life takes us, a huge part of me will always belong to you. I am willing to wait. For you, your acceptance, your forgiveness and for your love.
+
+      This will be my last shot to express what I truly feel towards you. Just tell me na hindi na ako and I promise you na I will trouble you no longer.
+
+      <div class="now-playing">
+        <h2>Now Playing: "Pahintulot" by Shirebound & Busking</h2>
+        <iframe class="spotify-embed"
+                src="https://open.spotify.com/embed/track/0jByCc9MS4p34rE3o9Cdmw?utm_source=generator"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy">
+        </iframe>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function() {
+      const password = '0607';
+      const lockscreen = document.getElementById('lockscreen');
+      const mainContent = document.querySelector('main');
+      const input = document.getElementById('password-input');
+      const keypad = document.getElementById('keypad');
+      const errorMsg = document.getElementById('error-message');
+      const clearBtn = document.getElementById('clear-btn');
+
+      function checkPassword() {
+        if (input.value === password) {
+          lockscreen.style.display = 'none';
+          mainContent.style.display = 'block';
+          errorMsg.textContent = '';
+          input.value = '';
+        } else if (input.value.length === password.length) {
+          errorMsg.textContent = 'Incorrect password, try again.';
+          input.value = '';
+        } else {
+          errorMsg.textContent = '';
+        }
+      }
+
+      keypad.addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON') {
+          const key = e.target.getAttribute('data-key');
+          if (key !== null) {
+            if (input.value.length < 4) {
+              input.value += key;
+              checkPassword();
+            }
+          }
+        }
+      });
+
+      clearBtn.addEventListener('click', () => {
+        input.value = '';
+        errorMsg.textContent = '';
+      });
+
+      // Optional: Allow typing with keyboard (numbers only)
+      input.addEventListener('input', () => {
+        input.value = input.value.replace(/[^0-9]/g, '').slice(0, 4);
+        checkPassword();
+      });
+    })();
+  </script>
+</body>
+</html>
